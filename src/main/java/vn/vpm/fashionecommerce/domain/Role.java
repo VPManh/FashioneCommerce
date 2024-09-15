@@ -1,11 +1,11 @@
 package vn.vpm.fashionecommerce.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
+@Table(name = "roles")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,6 +14,25 @@ public class Role {
     private String name;
 
     private String description;
+
+    @OneToMany(mappedBy = "role")
+    private List<User> users;
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public List<User> getUser() {
+        return users;
+    }
+
+    public void setUser(List<User> user) {
+        this.users = user;
+    }
 
     public long getId() {
         return id;
@@ -41,7 +60,11 @@ public class Role {
 
     @Override
     public String toString() {
-        return "Role [id=" + id + ", name=" + name + ", description=" + description + "]";
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", users=" + users +
+                '}';
     }
-
 }

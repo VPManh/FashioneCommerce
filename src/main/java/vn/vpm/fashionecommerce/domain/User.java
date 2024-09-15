@@ -2,9 +2,11 @@ package vn.vpm.fashionecommerce.domain;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +18,20 @@ public class User {
     private String phone;
     private String avatar;
 
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public void setId(long id) {
         this.id = id;
@@ -83,6 +99,7 @@ public class User {
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", role=" + role +
                 '}';
     }
 }
