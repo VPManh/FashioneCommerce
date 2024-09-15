@@ -90,7 +90,7 @@ public class UserController {
     public String getDeleteUser(Model model, @PathVariable long id){
         model.addAttribute("id",id);
         User user = this.userService.getUserById(id).get();
-        model.addAttribute("nameUser",user.getAddress());
+        model.addAttribute("nameUser",user.getFullName());
         model.addAttribute("newUser",user);
         return "admin/user/delete";
     }
