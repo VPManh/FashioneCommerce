@@ -4,11 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import vn.vpm.fashionecommerce.domain.User;
+import vn.vpm.fashionecommerce.service.UploadService;
 import vn.vpm.fashionecommerce.service.UserService;
 
 import java.util.List;
@@ -20,6 +19,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UploadService uploadService;
 
 
 
@@ -48,15 +49,15 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/create")
-    public String createUser(@ModelAttribute("newUser") User user){
+    public String createUser(@ModelAttribute("newUser") User user,
+                             @RequestParam("hoidanitFile") MultipartFile file){
 
-        List<User> arrayUser = this.userService.getAllUsers();
-        System.out.println(arrayUser);
+        String avatar =  this.uploadService.handleUploadFile(file,"avatar");
 
-        String hashedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(hashedPassword);
+//        String hashedPassword = passwordEncoder.encode(user.getPassword());
+//        user.setPassword(hashedPassword);
 
-        this.userService.handleSaveUser(user);
+//        this.userService.handleSaveUser(user);
         return "redirect:/admin/user";
     }
     // End View Create
