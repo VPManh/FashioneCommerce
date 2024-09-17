@@ -35,6 +35,7 @@ public class UserController {
     public String getUserDetail(Model model, @PathVariable long id){
         model.addAttribute("id",id);
         Optional<User> user = this.userService.getUserById(id);
+        model.addAttribute("nameUser",user.get().getFullName());
         model.addAttribute("user",user.get() );
         return "admin/user/detail";
     }
@@ -53,11 +54,13 @@ public class UserController {
                              @RequestParam("hoidanitFile") MultipartFile file){
 
         String avatar =  this.uploadService.handleUploadFile(file,"avatar");
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
 
-//        String hashedPassword = passwordEncoder.encode(user.getPassword());
-//        user.setPassword(hashedPassword);
+        user.setAvatar(avatar);
+        user.setPassword(hashedPassword);
+        user.setRole(this.userService.getRoleByName(user.getRole().getName()));
 
-//        this.userService.handleSaveUser(user);
+        this.userService.handleSaveUser(user);
         return "redirect:/admin/user";
     }
     // End View Create
@@ -71,13 +74,17 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/update")
-    public String postUpdateUser(@ModelAttribute("newUser") User user){
+    public String postUpdateUser(@ModelAttribute("newUser") User user, @RequestParam("hoidanitFile") MultipartFile file){
+
+        String avatar = this.uploadService.handleUploadFile(file,"avatar");
 
         Optional<User> currentUser = this.userService.getUserById(user.getId());
         if (currentUser.isPresent()){
             currentUser.get().setAddress(user.getAddress());
             currentUser.get().setPhone(user.getPhone());
             currentUser.get().setFullName(user.getFullName());
+            currentUser.get().setAvatar(avatar);
+            currentUser.get().setRole(this.userService.getRoleByName(user.getRole().getName()));
 
             this.userService.handleSaveUser(currentUser.get());
 

@@ -30,7 +30,7 @@
                                     <div class="row">
                                         <div class="col-12 mx-auto">
                                             <div class="d-flex justify-content-between">
-                                                <h3>User detail with id = ${id}</h3>
+                                                <h3>User detail for ${nameUser}</h3>
                                             </div>
 
                                             <hr />
@@ -44,6 +44,12 @@
                                                     <li class="list-group-item">Email: ${user.email}</li>
                                                     <li class="list-group-item">FullName: ${user.fullName}</li>
                                                     <li class="list-group-item">Address: ${user.address}</li>
+                                                    <li class="list-group-item">Phone: ${user.phone}</li>
+                                                    <li class="list-group-item">Role: ${user.role.name}</li>
+                                                    <li class="list-group-item">Avatar:
+                                                        <img src="/images/avatar/${user.avatar}" alt="User Avatar"
+                                                             style="max-width: 200px; max-height: 200px; margin-left: 50px;">
+                                                    </li>
                                                 </ul>
                                             </div>
                                             <a href="/admin/user" class="btn btn-success mt-3">Back</a>
