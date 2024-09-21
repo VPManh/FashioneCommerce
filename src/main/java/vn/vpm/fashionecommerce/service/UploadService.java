@@ -17,6 +17,11 @@ public class UploadService {
     private ServletContext servletContext;
 
     public String handleUploadFile(MultipartFile file, String targetFolder) {
+
+        if (file.isEmpty()) {
+            return "";
+        }
+
         String fileName = "";
         try {
 //            File.separator tương đương với dâấu /
