@@ -1,8 +1,11 @@
 package vn.vpm.fashionecommerce.domain;
 
 import jakarta.persistence.*;
+import vn.vpm.fashionecommerce.domain.detailproduct.Image;
+import vn.vpm.fashionecommerce.domain.detailproduct.ProductColor;
+import vn.vpm.fashionecommerce.domain.detailproduct.ProductSize;
 
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "products")
@@ -13,13 +16,23 @@ public class Product {
 
     private String name;
     private double price;
-    private String image;
-    private String detailDesc;
+    private int quantity;
+    private int sold;
     private String shortDesc;
-    private long quantity;
-    private long sold;
-    private String factory;
-    private String target;
+    private String imageUrl;
+    private String category;
+
+    // Quan hệ One-to-Many với bảng ProductSize
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductSize> sizes = new ArrayList<>();
+
+    // Quan hệ One-to-Many với bảng ProductColor
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<ProductColor> colors = new ArrayList<>();
+
+    // Quan hệ One-to-Many với bảng Image
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
     private List<OrderDetail> orderDetails;
@@ -48,20 +61,20 @@ public class Product {
         this.price = price;
     }
 
-    public String getImage() {
-        return image;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-    public String getDetailDesc() {
-        return detailDesc;
+    public int getSold() {
+        return sold;
     }
 
-    public void setDetailDesc(String detailDesc) {
-        this.detailDesc = detailDesc;
+    public void setSold(int sold) {
+        this.sold = sold;
     }
 
     public String getShortDesc() {
@@ -72,36 +85,44 @@ public class Product {
         this.shortDesc = shortDesc;
     }
 
-    public long getQuantity() {
-        return quantity;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setQuantity(long quantity) {
-        this.quantity = quantity;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public long getSold() {
-        return sold;
+    public String getCategory() {
+        return category;
     }
 
-    public void setSold(long sold) {
-        this.sold = sold;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public String getFactory() {
-        return factory;
+    public List<ProductSize> getSizes() {
+        return sizes;
     }
 
-    public void setFactory(String factory) {
-        this.factory = factory;
+    public void setSizes(List<ProductSize> sizes) {
+        this.sizes = sizes;
     }
 
-    public String getTarget() {
-        return target;
+    public List<ProductColor> getColors() {
+        return colors;
     }
 
-    public void setTarget(String target) {
-        this.target = target;
+    public void setColors(List<ProductColor> colors) {
+        this.colors = colors;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
     public List<OrderDetail> getOrderDetails() {
@@ -118,13 +139,14 @@ public class Product {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
-                ", image='" + image + '\'' +
-                ", detailDesc='" + detailDesc + '\'' +
-                ", shortDesc='" + shortDesc + '\'' +
                 ", quantity=" + quantity +
                 ", sold=" + sold +
-                ", factory='" + factory + '\'' +
-                ", target='" + target + '\'' +
+                ", shortDesc='" + shortDesc + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", category='" + category + '\'' +
+                ", sizes=" + sizes +
+                ", colors=" + colors +
+                ", images=" + images +
                 ", orderDetails=" + orderDetails +
                 '}';
     }
