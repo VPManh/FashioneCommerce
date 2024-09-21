@@ -12,6 +12,9 @@ import vn.vpm.fashionecommerce.domain.detailproduct.ProductSize;
 import vn.vpm.fashionecommerce.service.ProductService;
 import vn.vpm.fashionecommerce.service.UploadService;
 
+import java.util.List;
+import java.util.Optional;
+
 @Controller
 public class ProductController {
 
@@ -22,9 +25,20 @@ public class ProductController {
 
     @GetMapping("/admin/product")
     public String getPageProduct(Model model){
+        List<Product> products = productService.getAllProducts();
+        model.addAttribute("products", products);
         return "admin/product/show";
     }
 
+    @GetMapping("/admin/product/{id}")
+    public String getPageDetailProduct(Model model, @PathVariable long id){
+        Product product = this.productService.getFindById(id).get();
+        model.addAttribute("id",id);
+        model.addAttribute("product", product);
+        return "admin/product/detail";
+    }
+
+//    Start View Create Page
     @GetMapping("/admin/product/create")
     public String getPageCreateProduct(Model model){
         model.addAttribute("newProduct", new Product());
@@ -62,4 +76,33 @@ public class ProductController {
         this.productService.handleSaveProduct(product);
         return "redirect:/admin/product";
     }
+//    End View Create Page
+
+//    Start View Update Page
+
+    @GetMapping("/admin/product/update")
+    public String getPageUpdateProduct(Model model){
+//        Product product = this.productService.getFindById(id).get();
+//        System.out.println(product);
+        return "admin/product/update";
+    }
+//    End View Update Page
+
+
+
+//    Start View Delete Page
+    @GetMapping("/admin/product/delete/{id}")
+    public String getDeleteProduct(Model model, @PathVariable long id){
+        Product product = this.productService.getFindById(id).get();
+        model.addAttribute("id",id);
+        model.addAttribute("newProduct",product);
+        return "admin/product/delete";
+    }
+
+    @PostMapping("/admin/product/delete")
+    public String postDeleteProduct(Model model, @ModelAttribute("newProduct") Product product){
+        this.productService.handleDeleteProduct(product);
+        return "redirect:/admin/product";
+    }
+//    End View Delete Page
 }
